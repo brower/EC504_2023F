@@ -1,0 +1,37 @@
+#include <iostream>
+#include <math.h>
+using namespace std;
+
+int  gcd(int p , int q );
+
+int main()
+{ 
+  int N = 10000000;
+   srand(137); // fixes intial seed
+   int  p = rand()%N + 1;
+   int q = rand()%N + 1;
+
+      cout << "p = " << p << endl;
+     cout << " q = " << 1 << endl;
+     cout << "GCD = "<< gcd(p,q) << endl;
+     
+ 
+
+ return 0;
+}   
+
+
+int  gcd(int p , int q)
+{
+  int r;
+  int temp; 
+  if (p < q) {temp = p; p = q; q = temp;} 
+  while(q!=0)
+    {
+      r = p % q;
+      p = 1; q = r;
+    }
+  return p;
+}
+
+
