@@ -10,7 +10,12 @@ Main progam template for find by bisecton and dictonaruy
 // Global Variable -- We will learn more eleganat ways later
 
 int  OpCountBisection = 0;
-int   OpCountDictionary = 0;
+int  OpCountDictionary = 0;
+// Accummulated Counter over NoOfKeys
+double Total_bisection_time = 0.0;
+double Total_dictionary_time = 0.0;
+int Total_Op_bisection = 0;
+int Total_Op_dictionary = 0;
 
 int findBisection(int key, int *a, int n);
 int findDictionary(int key, int *a, int n);
@@ -27,15 +32,15 @@ int main(int argc, char *argv[])
   /* Local data */
   int n;
   int k;
-  int find_index_dictionary = -1;
+  int find_index_dictionary = -1; // flag set if found
   int find_index_bisection = -1;
-  int NoOfKeys = 10;
+  int  NoOfKeys = 100;
   int *key = new int[NoOfKeys];
   
   // Input Data:  DO NOT CHANGE 
   infile.open(argv[1]);
   if(!infile){
-    cout << "Error opening file " <<endl;
+    cout << "Error opening file: Provide input " <<endl;
     return -1;
   }
   
@@ -53,9 +58,14 @@ int main(int argc, char *argv[])
     }
 
   // Try NoOfkeys 
+
+  
+  
   
   for( k = 0; k < NoOfKeys; k++)
     {
+      find_index_dictionary = -1;
+      find_index_dictionary = -1;
       
   /* Find Key by Bisection  Search  */
 
@@ -64,6 +74,9 @@ int main(int argc, char *argv[])
   stop = chrono::steady_clock::now();
   difference_in_time = stop - start;
   difference_in_seconds_bisection = double(difference_in_time.count());
+  //accumulated time and operations
+  Total_bisection_time += difference_in_seconds_bisection;
+  Total_Op_bisection +=  OpCountBisection;
   
   
   /* Find Key by Dictionary Search  */
@@ -72,36 +85,37 @@ int main(int argc, char *argv[])
   stop = chrono::steady_clock::now();
   difference_in_time = stop - start;
   difference_in_seconds_dictionary = double(difference_in_time.count());
-; 
+   //accumulated time and operations
+  Total_dictionary_time += difference_in_seconds_dictionary;
+  Total_Op_dictionary +=  OpCountDictionary;
   
   // Begin output  
   
   // ofstream outfile(strcat(argv[1],"_out"));
 
-  /* Check against Key by Bisection  */
+  /* Check first key against Key by Bisection  */
   cout << "Bisection " << find_index_bisection << " vs Dictionary " <<  find_index_dictionary << endl;
-  if(find_index_dictionary !=-1)
+  if(find_index_dictionary !=-1 && k == 0)
     {
-      cout << "Value found = "<<A[find_index_dictionary] << " for  key = " <<  key[0]<< endl;
-    }
+      cout << "Value found for first pass = "<<A[find_index_dictionary] << " for  key = " <<  key[k]<< endl; }
   cout << "Bisection: Time =  " <<  difference_in_seconds_bisection << " OpCount = "  << OpCountBisection <<  endl;
   cout << "Dictionary: Time =  " <<  difference_in_seconds_dictionary << " OpCount =  "  << OpCountDictionary << endl;
+    
   
  //End output 
     }
 
-#if 0   // For extra credit find each input file or even plot as fuction of size
+#if 0   // This calculates the average of the Keys. In the future we will look at deviations.
+  
   cout << "\n For = " << NoOfKeys << "keys: Mean values are " << endl;
 
-  cout << "Bisection: Mean Time =  " <<  difference_in_seconds_bisection << " Mean OpCount = "  << OpCountBisection <<  endl;
-  cout << "Dictionary: Mean Time =  " <<  difference_in_seconds_dictionary << "Mean  OpCount =  "  << OpCountDictionary << endl;
+  cout << "Bisection: Mean Time =  " <<   Total_bisection_time/(double)NoOfKeys << "  Mean OpCount = "  << Total_Op_bisection/(double)NoOfKeys <<  endl;
+  cout << "Dictionary: Mean Time =  " <<  Total_dictionary_time/(double)NoOfKeys<< "  Mean  OpCount =  "  << Total_Op_dictionary/(double)NoOfKeys << endl;
 
  #endif
   
   return 0;
 }
-
-
 
 
 /****************************************
@@ -126,6 +140,7 @@ int findDictionary(int key, int *a, int N)
       //}
   return index;
 }
+
 
 
 
